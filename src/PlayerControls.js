@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
-import { Slider } from "@miblanchard/react-native-slider";
+// import { Slider } from "@miblanchard/react-native-slider";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "./theme/ThemeProvider";
 
@@ -31,7 +31,7 @@ function PlayerControls({ togglePlayback }) {
   return (
     <View>
       <View style={{ marginTop: 20 }}>
-        <Slider
+        {/* <Slider
           thumbTintColor={colors.primary}
           minimumTrackTintColor={colors.primary}
           thumbStyle={{ elevation: 5 }}
@@ -40,7 +40,7 @@ function PlayerControls({ togglePlayback }) {
           maximumValue={0}
           maximumValue={100000}
           onValueChange={value => setSlider(value)}
-        />
+        /> */}
       </View>
       <View
         style={{
@@ -51,7 +51,7 @@ function PlayerControls({ togglePlayback }) {
         }}>
         <ControlButton icon="skip-previous" color={colors.text} size={72} />
         <ControlButton
-          onPress={togglePlayback}
+        //   onPress={togglePlayback}
           icon="play-circle"
           color={colors.primary}
           size={108}
