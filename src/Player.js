@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* eslint-disable react-native/no-inline-styles */
+>>>>>>> 4a11323eb2134a6f9a8520f6859616f7e9c95413
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
@@ -15,11 +19,20 @@ import TrackPlayer, {
   State,
   usePlaybackState,
 } from "react-native-track-player";
+<<<<<<< HEAD
 import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
 import getTheme from "./theme/theme";
 import PlayerControls from "./PlayerControls";
 import TextPar from "./shared/TextPar";
 import LinearGradient from "react-native-linear-gradient";
+=======
+import LinearGradient from "react-native-linear-gradient";
+import { ThemeProvider } from "./theme/ThemeProvider";
+import getTheme from "./theme/theme";
+import PlayerControls from "./PlayerControls";
+import TextPar from "./shared/TextPar";
+import { useTheme } from "@react-navigation/native";
+>>>>>>> 4a11323eb2134a6f9a8520f6859616f7e9c95413
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
