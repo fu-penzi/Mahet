@@ -4,8 +4,8 @@ const themes = {
       primary: "#F09F10",
       primaryDark: "#C07F0C",
       background: "#1B1B1B",
-      font: "#F3F3F3",
-      fontDisabled: "#CCCCCC",
+      text: "#F3F3F3",
+      textDisabled: "#CCCCCC",
     },
   },
   light: {
@@ -13,8 +13,8 @@ const themes = {
       primary: "#FFFFFF",
       primaryDark: "#FFFFFF",
       background: "#FFFFFF",
-      font: "#FFFFFF",
-      fontDisabled: "#FFFFFF",
+      text: "#FFFFFF",
+      textDisabled: "#FFFFFF",
     },
   },
 };

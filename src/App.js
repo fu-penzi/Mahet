@@ -17,10 +17,10 @@ import TrackPlayer, {
   usePlaybackState,
 } from "react-native-track-player";
 import LinearGradient from "react-native-linear-gradient";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Slider } from "@miblanchard/react-native-slider";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import getTheme from "./theme/theme";
+import PlayerControls from "./PlayerControls";
+import TextPar from "./shared/TextPar";
 
 const setupIfNecessary = async () => {
   try {
@@ -56,56 +56,32 @@ const setupIfNecessary = async () => {
   }
 };
 
-const togglePlayback = async (playbackState: State) => {
-  const currentTrack = await TrackPlayer.getCurrentTrack();
-  if (currentTrack == null) {
-    // TODO: Perhaps present an error or restart the playlist?
-  } else {
-    if (playbackState !== State.Playing) {
-      await TrackPlayer.play();
-    } else {
-      await TrackPlayer.pause();
-    }
-  }
-};
-const ControlButton = props => {
-  const shadow = props.dropShadow
-    ? {
-        shadowOpacity: 0.36,
-        textShadowRadius: 6.68,
-        textShadowOffset: { width: 0, height: 5 },
-      }
-    : {};
-
-  return (
-    <TouchableOpacity onPress={props.onPress}>
-      <Icon
-        name={props.icon}
-        // style={{...shadow}}
-        size={props.size}
-        color={props.color}
-      />
-    </TouchableOpacity>
-  );
-};
 const App: () => Node = () => {
   const [theme, setTheme] = useState(getTheme("dark"));
   const playbackState = usePlaybackState();
-  const [slider, setSlider] = useState(0);
   useEffect(() => {
     setupIfNecessary();
   }, []);
-
+  const togglePlayback = async () => {
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+    if (currentTrack == null) {
+      // TODO: Perhaps present an error or restart the playlist?
+    } else {
+      if (playbackState !== State.Playing) {
+        await TrackPlayer.play();
+      } else {
+        await TrackPlayer.pause();
+      }
+    }
+  };
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaView style={{ flex: 1 }}>
         {/* <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} /> */}
         <StatusBar barStyle="light-content" />
-
         <LinearGradient
           colors={["rgba(27,27,27,0.51)", theme.colors.background]}
           style={[styles.contentWrapper, { color: theme.colors.font }]}>
-          {/* <PlayerControls /> */}
           <View
             style={{
               alignSelf: "center",
@@ -115,44 +91,16 @@ const App: () => Node = () => {
               style={styles.trackCover}
               source={require("../resources/images/pexels-photo-580679.webp")}
             />
+            <View style={{ marginTop: 30 }}>
+              <TextPar style={{ textAlign: "center", fontSize: 30 }}>
+                Lost Sanctuary
+              </TextPar>
+              <TextPar disabled style={{ textAlign: "center", fontSize: 20 }}>
+                Adrian Von Ziegler
+              </TextPar>
+            </View>
           </View>
-          <View style={{ marginTop: 50 }}>
-            <Slider
-              thumbTintColor={theme.colors.primary}
-              minimumTrackTintColor={theme.colors.primary}
-              thumbStyle={{ elevation: 5 }}
-              value={slider}
-              step={1}
-              maximumValue={0}
-              maximumValue={100000}
-              onValueChange={value => setSlider(value)}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignSelf: "center",
-              marginTop: 20,
-            }}>
-            <ControlButton
-              icon="skip-previous"
-              color={theme.colors.font}
-              size={72}
-            />
-            <ControlButton
-              onPress={() => togglePlayback(playbackState)}
-              icon="play-circle"
-              color={theme.colors.primary}
-              size={108}
-              dropShadow
-            />
-            <ControlButton
-              icon="skip-next"
-              color={theme.colors.font}
-              size={72}
-            />
-          </View>
+          <PlayerControls togglePlayback={togglePlayback} />
         </LinearGradient>
       </SafeAreaView>
     </ThemeProvider>
