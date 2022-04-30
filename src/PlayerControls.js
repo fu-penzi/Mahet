@@ -51,7 +51,7 @@ function PlayerControls({ togglePlayback }) {
         }}>
         <ControlButton icon="skip-previous" color={colors.text} size={72} />
         <ControlButton
-          onPress={togglePlayback}
+        //   onPress={togglePlayback}
           icon="play-circle"
           color={colors.primary}
           size={108}
