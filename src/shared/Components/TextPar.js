@@ -1,17 +1,17 @@
 import React from "react";
 import { Text } from "react-native";
 import PropTypes from "prop-types";
-import { useTheme } from "../theme/ThemeProvider";
+import { useTheme } from "../../theme/ThemeProvider";
 import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 
 function TextPar(props) {
   const { fontScale } = useWindowDimensions();
-  const { colors } = useTheme();
+  const { color } = useTheme();
   return (
     <Text
       style={[
         {
-          color: props.disabled ? colors.textDisabled : colors.text,
+          color: props.disabled ? color.textDisabled : color.text,
           fontSize: props.fontSize
             ? props.fontSize / fontScale
             : 16 / fontScale,

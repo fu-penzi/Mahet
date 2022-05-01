@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
 import TrackPlayer, {
   Capability,
   State,
   usePlaybackState,
 } from "react-native-track-player";
-import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
-import getTheme from "./theme/theme";
 import PlayerControls from "./PlayerControls";
-import TextPar from "./shared/TextPar";
+import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
+import { useTheme } from "../../theme/ThemeProvider";
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -75,7 +65,7 @@ export default function Player() {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
       <LinearGradient
-        colors={["rgba(27,27,27,0.51)", theme.colors.background]}
+        colors={["rgba(27,27,27,0.51)", theme.color.background]}
         style={styles.contentWrapper}>
         <View style={{ flex: 1, justifyContent: "space-between" }}>
           <View
@@ -88,7 +78,7 @@ export default function Player() {
             }}>
             <Image
               style={styles.trackCover}
-              source={require("../resources/images/pexels-photo-580679.webp")}
+              source={require("../../../resources/images/pexels-photo-580679.webp")}
             />
           </View>
           <View>
