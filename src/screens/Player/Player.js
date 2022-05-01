@@ -68,24 +68,17 @@ export default function Player() {
         colors={["rgba(27,27,27,0.51)", theme.color.background]}
         style={styles.contentWrapper}>
         <View style={{ flex: 1, justifyContent: "space-between" }}>
-          <View
-            style={{
-              height: 250,
-              elevation: 5,
-              alignItems: "center",
-              backgroundColor: "#000000",
-              // borderWidth: 10,
-            }}>
+          <View style={styles.trackImageWrap}>
             <Image
-              style={styles.trackCover}
-              source={require("../../../resources/images/pexels-photo-580679.webp")}
+              style={styles.trackImage}
+              source={require("maheta/resources/images/pexels-photo-580679.webp")}
             />
           </View>
           <View>
             <TextPar style={{ textAlign: "center" }} fontSize={30}>
               Lost Sanctuary
             </TextPar>
-            <TextPar disabled style={{ textAlign: "center" }} fontSize={20}>
+            <TextPar secondary style={{ textAlign: "center" }} fontSize={20}>
               Adrian Von Ziegler
             </TextPar>
           </View>
@@ -106,7 +99,13 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: "700",
   },
-  trackCover: {
+  trackImageWrap: {
+    height: 250,
+    elevation: 5,
+    alignItems: "center",
+    backgroundColor: "#000000",
+  },
+  trackImage: {
     flex: 1,
     width: undefined,
     height: undefined,

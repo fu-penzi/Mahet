@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -6,6 +6,7 @@ import { useTheme } from "../../theme/ThemeProvider";
 import usePassTheme from "../usePassTheme";
 
 export default function ControlButton(props) {
+  const [isOn, setIsOn] = useState(false);
   const { color, size } = useTheme();
   const styles = usePassTheme(makeStyles);
   return (
@@ -15,12 +16,13 @@ export default function ControlButton(props) {
         props.dropShadow ? styles.shadow : {},
         props.circular ? styles.circular : {},
       ]}
-      onPress={props.onPress}>
+      // onPress={props.onPress}
+      onPress={() => setIsOn(state => !state)}>
       <Icon
         name={props.icon}
         // style={{ ...shadow }}
         size={props.size ? size.icon[props.size] : size.icon.medium}
-        color={color.text}
+        color={isOn ? color.primary : color.text}
       />
     </TouchableOpacity>
   );

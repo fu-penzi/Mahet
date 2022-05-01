@@ -3,15 +3,17 @@ const darkColors = {
   primary: "#F09F10",
   primaryDark: "#C07F0C",
   background: "#1B1B1B",
+  backgroundSecondary: "#0F0F0F",
   text: "#F3F3F3",
-  textDisabled: "#CCCCCC",
+  textSecondary: "#CCCCCC",
 };
 const lightColors = {
   primary: "#F09F10",
   primaryDark: "#C07F0C",
   background: "#1B1B1B",
+  backgroundSecondary: "#0F0F0F",
   text: "#F3F3F3",
-  textDisabled: "#CCCCCC",
+  textSecondary: "#CCCCCC",
 };
 // sizes
 const size = {

@@ -11,7 +11,7 @@ function TextPar(props) {
     <Text
       style={[
         {
-          color: props.disabled ? color.textDisabled : color.text,
+          color: props.secondary ? color.textSecondary : color.text,
           fontSize: props.fontSize
             ? props.fontSize / fontScale
             : 16 / fontScale,

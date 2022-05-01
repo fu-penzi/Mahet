@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import PropTypes from "prop-types";
 import { Slider } from "@miblanchard/react-native-slider";
 import TextPar from "../../shared/Components/TextPar";
 import { useTheme } from "../../theme/ThemeProvider";
 import ControlButton from "../../shared/Components/ControlButton";
-import usePassTheme from "../../shared/usePassTheme";
-
 function PlayerControls({ togglePlayback }) {
   const { color } = useTheme();
   const [slider, setSlider] = useState(0);
@@ -29,6 +27,9 @@ function PlayerControls({ togglePlayback }) {
         </View>
       </View>
       <View style={styles.buttonWrapper}>
+        <ControlButton icon="shuffle" />
+        {/* <ControlButton icon="shuffle-variant" /> */}
+        {/* <ControlButton icon="shuffle-disabled" /> */}
         <ControlButton icon="skip-previous" />
         <ControlButton
           //   onPress={togglePlayback}
@@ -37,6 +38,8 @@ function PlayerControls({ togglePlayback }) {
           dropShadow
         />
         <ControlButton icon="skip-next" />
+        <ControlButton icon="repeat" />
+        {/* <ControlButton icon="repeat-once" /> */}
       </View>
     </View>
   );
@@ -46,8 +49,7 @@ const styles = {
   buttonWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "center",
-    marginTop: 5,
+    justifyContent: "space-between",
   },
 };
 export default PlayerControls;
