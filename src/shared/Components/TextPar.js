@@ -7,11 +7,15 @@ import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimen
 function TextPar(props) {
   const { fontScale } = useWindowDimensions();
   const { color } = useTheme();
+  var textColor = props.secondary ? color.textSecondary : color.text;
+  if (props.color) {
+    textColor = color[props.color];
+  }
   return (
     <Text
       style={[
         {
-          color: props.secondary ? color.textSecondary : color.text,
+          color: textColor,
           fontSize: props.fontSize
             ? props.fontSize / fontScale
             : 16 / fontScale,

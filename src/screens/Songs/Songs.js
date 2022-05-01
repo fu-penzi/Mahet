@@ -6,21 +6,26 @@ import usePassTheme from "../../shared/usePassTheme";
 import TextPar from "../../shared/Components/TextPar";
 import { images } from "../../mock/images";
 
-function Song({ title, author, image }) {
+function Song({ title, author, image, playing }) {
   const styles = usePassTheme(makeStyles);
   return (
     <View
       style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
       <View style={styles.trackImageWrap}>
-        <Image
-          style={styles.trackImage}
-          source={image}
-          //   source={{ uri: image }}
-        />
+        <Image style={styles.trackImage} source={image} />
       </View>
       <View>
-        <TextPar>{title}</TextPar>
-        <TextPar secondary>{author}</TextPar>
+        {playing ? (
+          <>
+            <TextPar color="primary">{title}</TextPar>
+            <TextPar color="primaryDark">{author}</TextPar>
+          </>
+        ) : (
+          <>
+            <TextPar>{title}</TextPar>
+            <TextPar secondary>{author}</TextPar>
+          </>
+        )}
       </View>
     </View>
   );
@@ -29,21 +34,23 @@ Song.propTypes = {
   title: PropTypes.string,
   author: PropTypes.string,
   image: PropTypes.number,
+  playing: PropTypes.bool,
 };
 
 export default function Songs(props) {
   const styles = usePassTheme(makeStyles);
   return (
-    <SafeAreaView style={styles.contentWrapper}>
+    <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
-      <ScrollView>
+      <ScrollView style={styles.contentWrapper}>
         <View>
-          {images.map((v, i) => (
+          {images.concat(images).map((v, i) => (
             <Song
               key={i}
               title="Moonsong"
               author="Adrian von Ziegler"
               image={v}
+              playing={i === 2}
             />
           ))}
         </View>
