@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-/* eslint-disable react-native/no-inline-styles */
->>>>>>> 4a11323eb2134a6f9a8520f6859616f7e9c95413
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
@@ -19,20 +15,11 @@ import TrackPlayer, {
   State,
   usePlaybackState,
 } from "react-native-track-player";
-<<<<<<< HEAD
 import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
 import getTheme from "./theme/theme";
 import PlayerControls from "./PlayerControls";
 import TextPar from "./shared/TextPar";
 import LinearGradient from "react-native-linear-gradient";
-=======
-import LinearGradient from "react-native-linear-gradient";
-import { ThemeProvider } from "./theme/ThemeProvider";
-import getTheme from "./theme/theme";
-import PlayerControls from "./PlayerControls";
-import TextPar from "./shared/TextPar";
-import { useTheme } from "@react-navigation/native";
->>>>>>> 4a11323eb2134a6f9a8520f6859616f7e9c95413
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -66,7 +53,7 @@ const setupIfNecessary = async () => {
     // to-do handle error
   }
 };
-export default function Player(props) {
+export default function Player() {
   const theme = useTheme();
   const playbackState = usePlaybackState();
   useEffect(() => {
@@ -90,25 +77,30 @@ export default function Player(props) {
       <LinearGradient
         colors={["rgba(27,27,27,0.51)", theme.colors.background]}
         style={styles.contentWrapper}>
-        <View
-          style={{
-            alignSelf: "center",
-            elevation: 5,
-          }}>
-          <Image
-            style={styles.trackCover}
-            source={require("../resources/images/pexels-photo-580679.webp")}
-          />
-          <View style={{ marginTop: 30 }}>
-            <TextPar style={{ textAlign: "center", fontSize: 30 }}>
+        <View style={{ flex: 1, justifyContent: "space-between" }}>
+          <View
+            style={{
+              height: 250,
+              elevation: 5,
+              alignItems: "center",
+              backgroundColor: "#000000",
+              // borderWidth: 10,
+            }}>
+            <Image
+              style={styles.trackCover}
+              source={require("../resources/images/pexels-photo-580679.webp")}
+            />
+          </View>
+          <View>
+            <TextPar style={{ textAlign: "center" }} fontSize={30}>
               Lost Sanctuary
             </TextPar>
-            <TextPar disabled style={{ textAlign: "center", fontSize: 20 }}>
+            <TextPar disabled style={{ textAlign: "center" }} fontSize={20}>
               Adrian Von Ziegler
             </TextPar>
           </View>
+          <PlayerControls togglePlayback={togglePlayback} />
         </View>
-        <PlayerControls togglePlayback={togglePlayback} />
       </LinearGradient>
     </SafeAreaView>
   );
@@ -119,16 +111,17 @@ Player.propTypes = {};
 const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
-    // backgroundColor: colors.background,
     padding: 30,
-    justifyContent: "center",
   },
   highlight: {
     fontWeight: "700",
   },
   trackCover: {
-    width: 320,
-    height: 250,
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    aspectRatio: 1.5 / 1,
+    maxWidth: "100%",
   },
   playButton: {
     padding: 50,
