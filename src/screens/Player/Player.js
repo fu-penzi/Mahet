@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
     padding: 30,
+    paddingTop: 20,
   },
   highlight: {
     fontWeight: "700",
@@ -103,13 +104,16 @@ const styles = StyleSheet.create({
     height: 250,
     elevation: 5,
     alignItems: "center",
+    alignSelf: "center",
     backgroundColor: "#000000",
+    borderRadius: 5,
+    overflow: "hidden",
   },
   trackImage: {
     flex: 1,
     width: undefined,
     height: undefined,
-    aspectRatio: 1.5 / 1,
+    aspectRatio: 1.1 / 1,
     maxWidth: "100%",
   },
   playButton: {

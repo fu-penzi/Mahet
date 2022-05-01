@@ -17,8 +17,8 @@ const App: () => Node = () => {
           screenOptions={({ route }) => ({
             headerTintColor: theme.color.text,
             headerStyle: {
-              backgroundColor: "rgba(27, 27, 27,0.85)",
-              elevation: 10,
+              height: route.name === "Player" ? 0 : 50,
+              backgroundColor: "rgba(27, 27, 27, 0.85)",
             },
             tabBarStyle: {
               backgroundColor: theme.color.backgroundSecondary,
@@ -27,7 +27,8 @@ const App: () => Node = () => {
               let iconName;
               if (route.name === "Player") {
                 iconName = "play";
-              } else if (route.name === "Songs") {
+              }
+              if (route.name === "Songs") {
                 iconName = "music-box-multiple";
               }
               return <Icon name={iconName} size={size} color={color} />;

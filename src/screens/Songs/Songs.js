@@ -79,6 +79,7 @@ const makeStyles = theme =>
       width: undefined,
       height: undefined,
       aspectRatio: 1 / 1,
+      resizeMode: "cover",
       maxWidth: "100%",
     },
   });
