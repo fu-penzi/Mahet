@@ -12,6 +12,8 @@ target 'Maheta' do
     :hermes_enabled => false
   )
 
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+
   target 'MahetaTests' do
     inherit! :complete
     # Pods for testing

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+  Image,
+  PermissionsAndroid,
+} from "react-native";
 import TrackPlayer, {
   Capability,
   State,
@@ -10,6 +17,9 @@ import PlayerControls from "./PlayerControls";
 import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
+import RNFetchBlob from "rn-fetch-blob";
+// import { NativeModules } from "react-native";
+// const RNFetchBlob = NativeModules.RNFetchBlob;
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -28,15 +38,45 @@ const setupIfNecessary = async () => {
       ],
       compactCapabilities: [Capability.Play, Capability.Pause],
     });
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+        title: "External storage permission",
+        message:
+          "Maheta needs access to your external storage " +
+          "to find your music.",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK",
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("Gicior");
+    } else {
+      console.log("Not gicior");
+    }
+    // await RNFetchBlob.fs
+    //   .readFile(`${RNFetchBlob.fs.dirs.DownloadDir}/206.mp3`, "base64")
+    //   .then(data => {});
 
-    await TrackPlayer.add({
-      url: "https://www.chosic.com/wp-content/uploads/2021/07/purrple-cat-equinox.mp3",
+    TrackPlayer.add({
+      url: `file://${RNFetchBlob.fs.dirs.DownloadDir}/206.mp3`,
       title: "Equinox",
       artist: "Purple Cat",
       artwork: "https://picsum.photos/id/1016/200/300",
       album: "",
-      duration: 140,
+      duration: 143,
     });
+
+    // await TrackPlayer.add({
+    //   url: "https://www.chosic.com/wp-content/uploads/2021/07/purrple-cat-equinox.mp3",
+    //   // url: "file:////storage/emulated/0/Download/206.mp3",
+    //   title: "Equinox",
+    //   artist: "Purple Cat",
+    //   artwork: "https://picsum.photos/id/1016/200/300",
+    //   album: "",
+    //   duration: 140,
+    // });
     // TrackPlayer.setRepeatMode(RepeatMode.Queue);
   } catch (e) {
     console.log(e);
@@ -50,23 +90,18 @@ export default function Player() {
   useEffect(() => {
     setupIfNecessary();
   }, []);
-  useEffect(() => {
-    async function togglePlaybackState() {
-      const currentTrack = await TrackPlayer.getCurrentTrack();
-      if (currentTrack == null) {
-        throw new Error("Tekst dolny");
-        // TODO: Perhaps present an error or restart the playlist?
-      } else {
-        if (playbackState !== State.Playing && playing) {
-          await TrackPlayer.play();
-        } else if (!playing) {
-          await TrackPlayer.pause();
-        }
+  const togglePlaying = async () => {
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+    if (currentTrack == null) {
+      throw new Error("Tekst dolny");
+      // TODO: Perhaps present an error or restart the playlist?
+    } else {
+      if (playbackState !== State.Playing && !playing) {
+        await TrackPlayer.play();
+      } else if (playing) {
+        await TrackPlayer.pause();
       }
     }
-    togglePlaybackState().catch(err => console.error(err));
-  }, [playing, playbackState]);
-  const togglePlaying = () => {
     setPlaying(state => !state);
   };
   return (
