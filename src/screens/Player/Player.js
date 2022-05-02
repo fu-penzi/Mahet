@@ -45,21 +45,29 @@ const setupIfNecessary = async () => {
 };
 export default function Player() {
   const theme = useTheme();
+  const [playing, setPlaying] = useState(false);
   const playbackState = usePlaybackState();
   useEffect(() => {
     setupIfNecessary();
   }, []);
-  const togglePlayback = async () => {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    if (currentTrack == null) {
-      // TODO: Perhaps present an error or restart the playlist?
-    } else {
-      if (playbackState !== State.Playing) {
-        await TrackPlayer.play();
+  useEffect(() => {
+    async function togglePlaybackState() {
+      const currentTrack = await TrackPlayer.getCurrentTrack();
+      if (currentTrack == null) {
+        throw new Error("Tekst dolny");
+        // TODO: Perhaps present an error or restart the playlist?
       } else {
-        await TrackPlayer.pause();
+        if (playbackState !== State.Playing && playing) {
+          await TrackPlayer.play();
+        } else if (!playing) {
+          await TrackPlayer.pause();
+        }
       }
     }
+    togglePlaybackState().catch(err => console.error(err));
+  }, [playing, playbackState]);
+  const togglePlaying = () => {
+    setPlaying(state => !state);
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -82,7 +90,7 @@ export default function Player() {
               Adrian Von Ziegler
             </TextPar>
           </View>
-          <PlayerControls togglePlayback={togglePlayback} />
+          <PlayerControls togglePlayback={togglePlaying} playing={playing} />
         </View>
       </LinearGradient>
     </SafeAreaView>

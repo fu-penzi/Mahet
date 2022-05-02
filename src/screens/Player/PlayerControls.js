@@ -5,7 +5,7 @@ import { Slider } from "@miblanchard/react-native-slider";
 import TextPar from "../../shared/Components/TextPar";
 import { useTheme } from "../../theme/ThemeProvider";
 import ControlButton from "../../shared/Components/ControlButton";
-function PlayerControls({ togglePlayback }) {
+function PlayerControls({ togglePlayback, playing }) {
   const { color } = useTheme();
   const [slider, setSlider] = useState(0);
   return (
@@ -32,9 +32,9 @@ function PlayerControls({ togglePlayback }) {
         {/* <ControlButton icon="shuffle-disabled" /> */}
         <ControlButton icon="skip-previous" />
         <ControlButton
-          //   onPress={togglePlayback}
+          onPress={togglePlayback}
           circular
-          icon="play"
+          icon={playing ? "pause" : "play"}
           dropShadow
         />
         <ControlButton icon="skip-next" />

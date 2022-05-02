@@ -16,8 +16,8 @@ export default function ControlButton(props) {
         props.dropShadow ? styles.shadow : {},
         props.circular ? styles.circular : {},
       ]}
-      // onPress={props.onPress}
-      onPress={() => setIsOn(state => !state)}>
+      // onPress={}
+      onPress={props.onPress ? props.onPress : () => setIsOn(state => !state)}>
       <Icon
         name={props.icon}
         // style={{ ...shadow }}
