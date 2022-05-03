@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View,
-  Image,
-  PermissionsAndroid,
-} from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
 import TrackPlayer, {
   Capability,
   State,
@@ -18,8 +11,38 @@ import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
 import RNFetchBlob from "rn-fetch-blob";
-// import { NativeModules } from "react-native";
-// const RNFetchBlob = NativeModules.RNFetchBlob;
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
+const requestPermissions = async () => {
+  request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then(result => {
+    check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
+      .then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              "This feature is not available (on this device / in this context)",
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              "The permission has not been requested / is denied but requestable",
+            );
+            break;
+          case RESULTS.LIMITED:
+            console.log("The permission is limited: some actions are possible");
+            break;
+          case RESULTS.GRANTED:
+            console.log("The permission is granted");
+            break;
+          case RESULTS.BLOCKED:
+            console.log("The permission is denied and not requestable anymore");
+            break;
+        }
+      })
+      .catch(error => {
+        // …
+      });
+  });
+};
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -38,27 +61,8 @@ const setupIfNecessary = async () => {
       ],
       compactCapabilities: [Capability.Play, Capability.Pause],
     });
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      {
-        title: "External storage permission",
-        message:
-          "Maheta needs access to your external storage " +
-          "to find your music.",
-        buttonNeutral: "Ask Me Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK",
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("Gicior");
-    } else {
-      console.log("Not gicior");
-    }
-    // await RNFetchBlob.fs
-    //   .readFile(`${RNFetchBlob.fs.dirs.DownloadDir}/206.mp3`, "base64")
-    //   .then(data => {});
 
+    await requestPermissions();
     TrackPlayer.add({
       url: `file://${RNFetchBlob.fs.dirs.DownloadDir}/206.mp3`,
       title: "Equinox",
@@ -80,7 +84,6 @@ const setupIfNecessary = async () => {
     // TrackPlayer.setRepeatMode(RepeatMode.Queue);
   } catch (e) {
     console.log(e);
-    // to-do handle error
   }
 };
 export default function Player() {
