@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme/ThemeProvider";
-import usePassTheme from "../usePassTheme";
+import usePassTheme from "../../hooks/usePassTheme";
 
 export default function ControlButton(props) {
   const [isOn, setIsOn] = useState(false);

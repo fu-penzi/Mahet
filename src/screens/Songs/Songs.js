@@ -2,9 +2,9 @@ import React from "react";
 import { StatusBar, View, StyleSheet, Image, ScrollView } from "react-native";
 import PropTypes from "prop-types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import usePassTheme from "../../shared/usePassTheme";
 import TextPar from "../../shared/Components/TextPar";
 import { images } from "../../mock/images";
+import usePassTheme from "../../hooks/usePassTheme";
 
 function Song({ title, author, image, playing }) {
   const styles = usePassTheme(makeStyles);

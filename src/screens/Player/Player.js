@@ -10,40 +10,8 @@ import PlayerControls from "./PlayerControls";
 import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
-import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
-import * as RNFS from "react-native-fs";
-// import MusicMetadataWrapper from "react-native-music-metadata";
-const requestPermissions = async () => {
-  request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then(result => {
-    check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
-      .then(result => {
-        switch (result) {
-          case RESULTS.UNAVAILABLE:
-            console.log(
-              "This feature is not available (on this device / in this context)",
-            );
-            break;
-          case RESULTS.DENIED:
-            console.log(
-              "The permission has not been requested / is denied but requestable",
-            );
-            break;
-          case RESULTS.LIMITED:
-            console.log("The permission is limited: some actions are possible");
-            break;
-          case RESULTS.GRANTED:
-            console.log("The permission is granted");
-            break;
-          case RESULTS.BLOCKED:
-            console.log("The permission is denied and not requestable anymore");
-            break;
-        }
-      })
-      .catch(error => {
-        // …
-      });
-  });
-};
+import { DownloadDirectoryPath } from "react-native-fs";
+import getPermissions from "../../hooks/getPermissions";
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -62,35 +30,14 @@ const setupIfNecessary = async () => {
       ],
       compactCapabilities: [Capability.Play, Capability.Pause],
     });
-
-    await requestPermissions();
-    // try {
-    //   const metadata = await parseFile(
-    //     `file://${RNFS.DownloadDirectoryPath}/206.mp3`,
-    //   );
-    //   // console.log(util.inspect(metadata, { showHidden: false, depth: null }));
-    // } catch (error) {
-    //   console.error(error.message);
-    // }
-
     TrackPlayer.add({
-      url: `file://${RNFS.DownloadDirectoryPath}/206.mp3`,
+      url: `file://${DownloadDirectoryPath}/206.mp3`,
       title: "Equinox",
       artist: "Purple Cat",
       artwork: "https://picsum.photos/id/1016/200/300",
       album: "",
       duration: 143,
     });
-
-    // await TrackPlayer.add({
-    //   url: "https://www.chosic.com/wp-content/uploads/2021/07/purrple-cat-equinox.mp3",
-    //   // url: "file:////storage/emulated/0/Download/206.mp3",
-    //   title: "Equinox",
-    //   artist: "Purple Cat",
-    //   artwork: "https://picsum.photos/id/1016/200/300",
-    //   album: "",
-    //   duration: 140,
-    // });
     // TrackPlayer.setRepeatMode(RepeatMode.Queue);
   } catch (e) {
     console.log(e);
@@ -101,19 +48,12 @@ export default function Player() {
   const [playing, setPlaying] = useState(false);
   const playbackState = usePlaybackState();
   useEffect(() => {
-    setupIfNecessary();
-    RNFS.readDir(RNFS.DownloadDirectoryPath).then(files => console.log(files));
-    // MusicMetadataWrapper.getMetadata([
-    //   `file://${RNFS.DownloadDirectoryPath}/206.mp3`,
-    // ])
-    //   .then(tracks => {
-    //     tracks.forEach(track => {
-    //       console.log(`${track.title} by ${track.artist}`);
-    //     });
-    //   })
-    //   .catch(err => {
-    //     console.error(err);
-    //   });
+    getPermissions().then(areGranted => {
+      if (areGranted) {
+        console.log("Permissions granted");
+        setupIfNecessary();
+      }
+    });
   }, []);
   const togglePlaying = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
