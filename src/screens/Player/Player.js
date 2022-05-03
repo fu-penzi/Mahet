@@ -10,8 +10,9 @@ import PlayerControls from "./PlayerControls";
 import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
-import RNFetchBlob from "rn-fetch-blob";
 import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
+import * as RNFS from "react-native-fs";
+// import MusicMetadataWrapper from "react-native-music-metadata";
 const requestPermissions = async () => {
   request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then(result => {
     check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
@@ -63,8 +64,17 @@ const setupIfNecessary = async () => {
     });
 
     await requestPermissions();
+    // try {
+    //   const metadata = await parseFile(
+    //     `file://${RNFS.DownloadDirectoryPath}/206.mp3`,
+    //   );
+    //   // console.log(util.inspect(metadata, { showHidden: false, depth: null }));
+    // } catch (error) {
+    //   console.error(error.message);
+    // }
+
     TrackPlayer.add({
-      url: `file://${RNFetchBlob.fs.dirs.DownloadDir}/206.mp3`,
+      url: `file://${RNFS.DownloadDirectoryPath}/206.mp3`,
       title: "Equinox",
       artist: "Purple Cat",
       artwork: "https://picsum.photos/id/1016/200/300",
@@ -92,6 +102,18 @@ export default function Player() {
   const playbackState = usePlaybackState();
   useEffect(() => {
     setupIfNecessary();
+    RNFS.readDir(RNFS.DownloadDirectoryPath).then(files => console.log(files));
+    // MusicMetadataWrapper.getMetadata([
+    //   `file://${RNFS.DownloadDirectoryPath}/206.mp3`,
+    // ])
+    //   .then(tracks => {
+    //     tracks.forEach(track => {
+    //       console.log(`${track.title} by ${track.artist}`);
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //   });
   }, []);
   const togglePlaying = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
