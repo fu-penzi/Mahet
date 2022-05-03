@@ -11,7 +11,8 @@ import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
 import { DownloadDirectoryPath } from "react-native-fs";
-import getPermissions from "../../hooks/getPermissions";
+import getPermissions from "../../shared/getPermissions";
+import getMusicFiles from "./getMusicFiles";
 const setupIfNecessary = async () => {
   try {
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -48,12 +49,14 @@ export default function Player() {
   const [playing, setPlaying] = useState(false);
   const playbackState = usePlaybackState();
   useEffect(() => {
-    getPermissions().then(areGranted => {
-      if (areGranted) {
-        console.log("Permissions granted");
-        setupIfNecessary();
-      }
-    });
+    getPermissions()
+      .then(getMusicFiles)
+      .then(areGranted => {
+        if (areGranted) {
+          console.log("Permissions granted");
+          setupIfNecessary();
+        }
+      });
   }, []);
   const togglePlaying = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
