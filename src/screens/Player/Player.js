@@ -3,75 +3,73 @@ import PropTypes from "prop-types";
 import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
 import TrackPlayer, {
   Capability,
-  State,
   usePlaybackState,
 } from "react-native-track-player";
 import PlayerControls from "./PlayerControls";
 import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
-import { DownloadDirectoryPath } from "react-native-fs";
 import getPermissions from "../../shared/getPermissions";
 import getMusicFiles from "./getMusicFiles";
-const setupIfNecessary = async () => {
-  try {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    if (currentTrack !== null) {
-      return;
-    }
-    await TrackPlayer.setupPlayer({});
-    await TrackPlayer.updateOptions({
-      stopWithApp: true,
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-        Capability.Stop,
-      ],
-      compactCapabilities: [Capability.Play, Capability.Pause],
-    });
-    TrackPlayer.add({
-      url: `file://${DownloadDirectoryPath}/206.mp3`,
-      title: "Equinox",
-      artist: "Purple Cat",
-      artwork: "https://picsum.photos/id/1016/200/300",
-      album: "",
-      duration: 143,
-    });
-    // TrackPlayer.setRepeatMode(RepeatMode.Queue);
-  } catch (e) {
-    console.log(e);
+const addToQueue = async songs => {
+  if (!Array.isArray(songs)) {
+    return;
   }
+  //
+  const currentTrack = await TrackPlayer.getCurrentTrack();
+  if (currentTrack !== null) {
+    return;
+  }
+  //
+  songs.forEach(element => {
+    TrackPlayer.add({
+      url: element.uri,
+      title: element.title,
+      artist: element.artist,
+      album: element.albumName,
+      duration: element.duration,
+      // artwork: "https://picsum.photos/id/1016/200/300",
+    });
+  });
 };
 export default function Player() {
   const theme = useTheme();
-  const [playing, setPlaying] = useState(false);
   const playbackState = usePlaybackState();
   useEffect(() => {
+    const setupIfNecessary = async () => {
+      const currentTrack = await TrackPlayer.getCurrentTrack();
+      if (currentTrack !== null) {
+        return;
+      }
+      await TrackPlayer.setupPlayer({});
+      await TrackPlayer.updateOptions({
+        stopWithApp: true,
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+          Capability.Stop,
+        ],
+        compactCapabilities: [Capability.Play, Capability.Pause],
+      });
+
+      // TrackPlayer.setRepeatMode(RepeatMode.Queue);
+    };
+    setupIfNecessary().catch(err => console.error(err));
+  }, []);
+  useEffect(() => {
     getPermissions()
-      .then(getMusicFiles)
       .then(areGranted => {
         if (areGranted) {
           console.log("Permissions granted");
-          setupIfNecessary();
+          return getMusicFiles();
         }
-      });
+      })
+      .then(res => addToQueue(res))
+      .catch(err => console.error(err));
   }, []);
-  const togglePlaying = async () => {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    if (currentTrack == null) {
-      throw new Error("Tekst dolny");
-      // TODO: Perhaps present an error or restart the playlist?
-    } else {
-      if (playbackState !== State.Playing && !playing) {
-        await TrackPlayer.play();
-      } else if (playing) {
-        await TrackPlayer.pause();
-      }
-    }
-    setPlaying(state => !state);
-  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
@@ -93,7 +91,7 @@ export default function Player() {
               Adrian Von Ziegler
             </TextPar>
           </View>
-          <PlayerControls togglePlayback={togglePlaying} playing={playing} />
+          <PlayerControls />
         </View>
       </LinearGradient>
     </SafeAreaView>
