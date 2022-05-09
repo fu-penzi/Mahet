@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
-import TrackPlayer, {
-  Capability,
-  usePlaybackState,
-} from "react-native-track-player";
+import TrackPlayer, { Capability } from "react-native-track-player";
 import PlayerControls from "./PlayerControls";
 import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
@@ -12,6 +9,7 @@ import { useTheme } from "../../theme/ThemeProvider";
 import getPermissions from "../../shared/getPermissions";
 import getMusicFiles from "./getMusicFiles";
 const addToQueue = async songs => {
+  console.log("Adding tracks to queue", songs);
   if (!Array.isArray(songs)) {
     return;
   }
