@@ -2,14 +2,14 @@ import Realm from "realm";
 const TrackSchema = {
   name: "Track",
   properties: {
-    uri: "string",
+    url: "string",
     title: "string?",
     artist: "string?",
-    albumName: "string?",
+    album: "string?",
     duration: "double",
     artwork: "string?",
   },
-  primaryKey: "uri",
+  primaryKey: "url",
 };
 const saveTracks = async tracks => {
   const realm = await Realm.open({
@@ -19,16 +19,15 @@ const saveTracks = async tracks => {
   realm.write(() => {
     realm.deleteAll();
   });
-  console.log("Saving track metadata to db", tracks);
   tracks.forEach(track => {
     realm.write(() => {
       track = realm.create("Track", {
-        uri: track.uri,
+        url: track.uri,
         title: track.title,
         artist: track.artist,
-        albumName: track.albumName,
+        album: track.albumName,
         duration: track.duration,
-        // artwork: "https://picsum.photos/id/1016/200/300",
+        artwork: null,
       });
     });
   });
@@ -39,15 +38,13 @@ const loadTracks = async () => {
     schema: [TrackSchema],
   });
   const tracks = realm.objects("Track");
-  let loadedTracks = tracks.map(track => ({
-    uri: track.uri,
+  return tracks.map(track => ({
+    url: track.url,
     title: track.title,
     artist: track.artist,
-    albumName: track.albumName,
+    album: track.album,
     duration: track.duration,
     artwork: track.artwork,
   }));
-  console.log("Loading tracks from db", loadedTracks);
-  return loadedTracks;
 };
 export { saveTracks, loadTracks };

@@ -1,43 +1,35 @@
 import React, { useState } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import PropTypes from "prop-types";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme/ThemeProvider";
 import usePassTheme from "../../hooks/usePassTheme";
 
-export default function ControlButton(props) {
+export default function ControlButton(props: ControlButtonProps): JSX.Element {
   const [isOn, setIsOn] = useState(false);
   const { color, size } = useTheme();
   const styles = usePassTheme(makeStyles);
   return (
     <TouchableOpacity
       activeOpacity={0.4}
-      style={[
-        props.dropShadow ? styles.shadow : {},
-        props.circular ? styles.circular : {},
-      ]}
+      style={props.circular ? styles.circular : {}}
       onPress={props.onPress ? props.onPress : () => setIsOn(state => !state)}>
       <Icon
         name={props.icon}
-        // style={{ ...shadow }}
         size={props.size ? size.icon[props.size] : size.icon.medium}
         color={isOn ? color.primary : color.text}
       />
     </TouchableOpacity>
   );
 }
-ControlButton.propTypes = {
-  dropShadow: PropTypes.bool,
-  circular: PropTypes.bool,
-  size: PropTypes.oneOf(["small", "medium", "large"]),
-};
-const makeStyles = theme =>
+interface ControlButtonProps {
+  circular?: boolean;
+  size?: "small" | "medium" | "large";
+  icon: string;
+  onPress: () => any;
+  // dropShadow:boolean
+}
+const makeStyles = (theme: any) =>
   StyleSheet.create({
-    shadow: {
-      shadowOpacity: 0.25,
-      textShadowRadius: 3.84,
-      textShadowOffset: { width: 0, height: 2 },
-    },
     circular: {
       borderRadius: 100,
       backgroundColor: theme.color.primary,

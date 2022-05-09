@@ -1,10 +1,14 @@
 import React from "react";
-import { Text } from "react-native";
-import PropTypes from "prop-types";
+import { Text, useWindowDimensions } from "react-native";
 import { useTheme } from "../../theme/ThemeProvider";
-import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
-
-function TextPar(props) {
+type Props = {
+  children?: React.ReactNode;
+  secondary?: boolean;
+  style?: object;
+  fontSize?: number;
+  color?: string;
+};
+function TextPar(props: Props): JSX.Element {
   const { fontScale } = useWindowDimensions();
   const { color } = useTheme();
   var textColor = props.secondary ? color.textSecondary : color.text;
@@ -26,6 +30,4 @@ function TextPar(props) {
     </Text>
   );
 }
-TextPar.propTypes = {};
-
 export default TextPar;

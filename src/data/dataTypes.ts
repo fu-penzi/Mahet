@@ -1,8 +1,9 @@
-interface Track {
-  uri: string;
-  title: string;
-  artist: string;
-  albumName: string;
+export default interface Track {
+  url: string;
+  title?: string;
+  artist?: string;
+  album?: string;
   duration: number;
-  // artwork: "https://picsum.photos/id/1016/200/300",
+  artwork?: string;
+  // artwork: "https://picsum.Fphotos/id/1016/200/300",
 }

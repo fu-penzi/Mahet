@@ -25,7 +25,7 @@ module.exports = {
       },
     ],
     quotes: ["error", "double"],
-    semi: ["error", "always"],
+    // semi: ["error", "always"],
     "react-native/no-unused-styles": 0,
     "react-native/split-platform-components": 2,
     "react-native/no-inline-styles": 0,

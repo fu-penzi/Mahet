@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
 import TrackPlayer, { Capability } from "react-native-track-player";
 import PlayerControls from "./PlayerControls";
@@ -8,9 +7,10 @@ import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
 import getPermissions from "../../shared/getPermissions";
 import getMusicFiles from "./getMusicFiles";
-const addToQueue = async songs => {
-  console.log("Adding tracks to queue", songs);
-  if (!Array.isArray(songs)) {
+import Track from "src/data/dataTypes";
+const addToQueue = async (tracks: Track[]) => {
+  console.log(tracks);
+  if (!Array.isArray(tracks)) {
     return;
   }
   //
@@ -19,18 +19,11 @@ const addToQueue = async songs => {
     return;
   }
   //
-  songs.forEach(element => {
-    TrackPlayer.add({
-      url: element.uri,
-      title: element.title,
-      artist: element.artist,
-      album: element.albumName,
-      duration: element.duration,
-      // artwork: "https://picsum.photos/id/1016/200/300",
-    });
+  tracks.forEach(track => {
+    TrackPlayer.add(track);
   });
 };
-export default function Player() {
+export default function Player(): JSX.Element {
   const theme = useTheme();
   useEffect(() => {
     const setupIfNecessary = async () => {
@@ -55,12 +48,13 @@ export default function Player() {
   }, []);
   useEffect(() => {
     getPermissions()
-      .then(areGranted => {
-        if (areGranted) {
-          console.log("Permissions granted");
-          return getMusicFiles();
-        }
-      })
+      .then(areGranted =>
+        areGranted
+          ? getMusicFiles()
+          : Promise.reject(
+              "Could not get permissions, clear storage and try again.",
+            ),
+      )
       .then(res => addToQueue(res))
       .catch(err => console.error(err));
   }, []);
@@ -92,9 +86,6 @@ export default function Player() {
     </SafeAreaView>
   );
 }
-
-Player.propTypes = {};
-
 const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,

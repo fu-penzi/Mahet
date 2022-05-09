@@ -1,43 +1,11 @@
 import React from "react";
-import { StatusBar, View, StyleSheet, Image, ScrollView } from "react-native";
-import PropTypes from "prop-types";
+import { StatusBar, View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TextPar from "../../shared/Components/TextPar";
 import { images } from "../../mock/images";
 import usePassTheme from "../../hooks/usePassTheme";
+import Song from "src/screens/Songs/Song";
 
-function Song({ title, author, image, playing }) {
-  const styles = usePassTheme(makeStyles);
-  return (
-    <View
-      style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
-      <View style={styles.trackImageWrap}>
-        <Image style={styles.trackImage} source={image} />
-      </View>
-      <View>
-        {playing ? (
-          <>
-            <TextPar color="primary">{title}</TextPar>
-            <TextPar color="primaryDark">{author}</TextPar>
-          </>
-        ) : (
-          <>
-            <TextPar>{title}</TextPar>
-            <TextPar secondary>{author}</TextPar>
-          </>
-        )}
-      </View>
-    </View>
-  );
-}
-Song.propTypes = {
-  title: PropTypes.string,
-  author: PropTypes.string,
-  image: PropTypes.number,
-  playing: PropTypes.bool,
-};
-
-export default function Songs(props) {
+export default function Songs() {
   const styles = usePassTheme(makeStyles);
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -58,9 +26,7 @@ export default function Songs(props) {
     </SafeAreaView>
   );
 }
-
-Songs.propTypes = {};
-const makeStyles = theme =>
+const makeStyles = (theme: any) =>
   StyleSheet.create({
     contentWrapper: {
       flex: 1,

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   checkMultiple,
   PERMISSIONS,
@@ -22,10 +21,5 @@ export default async function getPermissions() {
       PERMISSIONS_NEEDED.map(per => result[per] === RESULTS.GRANTED).every(
         el => el === true,
       ),
-    )
-    .catch(error => {
-      console.error("Error when getting permisions:");
-      console.error(error);
-      return false;
-    });
+    );
 }

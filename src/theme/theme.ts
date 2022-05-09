@@ -23,7 +23,7 @@ const size = {
     large: 72,
   },
 };
-const themes = {
+const themes: Themes = {
   dark: {
     color: darkColors,
     size: size,
@@ -33,6 +33,14 @@ const themes = {
     size: size,
   },
 };
-export default function getTheme(theme) {
-  return themes[theme];
+type Theme = {
+  color: object;
+  size: object;
+};
+type Themes = {
+  [index in ThemeName]: Theme;
+};
+type ThemeName = "dark" | "light";
+export default function getTheme(theme: ThemeName) {
+  return themes[theme as keyof typeof themes];
 }
