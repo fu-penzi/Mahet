@@ -34,7 +34,6 @@ const addToQueue = async songs => {
 };
 export default function Player() {
   const theme = useTheme();
-  const playbackState = usePlaybackState();
   useEffect(() => {
     const setupIfNecessary = async () => {
       const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -53,8 +52,6 @@ export default function Player() {
         ],
         compactCapabilities: [Capability.Play, Capability.Pause],
       });
-
-      // TrackPlayer.setRepeatMode(RepeatMode.Queue);
     };
     setupIfNecessary().catch(err => console.error(err));
   }, []);

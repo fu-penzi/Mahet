@@ -14,6 +14,7 @@ function PlayerControls() {
   const [slider, setSlider] = useState(0);
   const [playing, setPlaying] = useState(false);
   const playbackState = usePlaybackState();
+
   const togglePlaying = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack == null) {
@@ -38,6 +39,9 @@ function PlayerControls() {
       console.log("Already fist track in queue"),
     );
   };
+  const handleToggleRepeat = async () => {
+    // TrackPlayer.setRepeatMode(RepeatMode.Queue);
+  };
   return (
     <View>
       <View>
@@ -47,7 +51,7 @@ function PlayerControls() {
           thumbStyle={{ elevation: 5, width: 13, height: 13 }}
           value={slider}
           step={1}
-          maximumValue={0}
+          minimumValue={0}
           maximumValue={100000}
           onValueChange={value => setSlider(value)}
         />
