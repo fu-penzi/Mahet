@@ -8,7 +8,7 @@ import Songs from "./screens/Songs/Songs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { DataProvider } from "src/providers/DataProvider";
-import { PlayerControlProvider } from "src/providers/PlayerProvider";
+import { PlayerControlProvider } from "src/providers/PlayerControlProvider";
 const Tab = createBottomTabNavigator();
 const App: () => Node = () => {
   const [theme, setTheme] = useState(getTheme("dark"));

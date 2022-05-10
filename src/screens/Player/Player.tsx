@@ -1,47 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { SafeAreaView, StatusBar, StyleSheet, View, Image } from "react-native";
-import TrackPlayer, { Capability } from "react-native-track-player";
 import PlayerControls from "./PlayerControls";
 import TextPar from "../../shared/Components/TextPar";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "../../theme/ThemeProvider";
-import getPermissions from "../../shared/getPermissions";
-import getMusicFiles from "./getMusicFiles";
-import Track from "src/data/dataTypes";
 export default function Player(): JSX.Element {
   const theme = useTheme();
-  useEffect(() => {
-    const setupIfNecessary = async () => {
-      const currentTrack = await TrackPlayer.getCurrentTrack();
-      if (currentTrack !== null) {
-        return;
-      }
-      await TrackPlayer.setupPlayer({});
-      await TrackPlayer.updateOptions({
-        stopWithApp: true,
-        capabilities: [
-          Capability.Play,
-          Capability.Pause,
-          Capability.SkipToNext,
-          Capability.SkipToPrevious,
-          Capability.Stop,
-        ],
-        compactCapabilities: [Capability.Play, Capability.Pause],
-      });
-    };
-    setupIfNecessary().catch(err => console.error(err));
-  }, []);
-  useEffect(() => {
-    getPermissions()
-      .then(areGranted =>
-        areGranted
-          ? getMusicFiles()
-          : Promise.reject(
-              "Could not get permissions, clear stosrage and try again.",
-            ),
-      )
-      .catch(err => console.error(err));
-  }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />

@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import PropTypes from "prop-types";
 import { Slider } from "@miblanchard/react-native-slider";
 import TextPar from "../../shared/Components/TextPar";
 import { useTheme } from "../../theme/ThemeProvider";
 import ControlButton from "../../shared/Components/ControlButton";
-import TrackPlayer, {
-  State,
-  usePlaybackState,
-} from "react-native-track-player";
-import { usePlayerControl } from "src/providers/PlayerProvider";
+import TrackPlayer, { useProgress } from "react-native-track-player";
+import { usePlayerControl } from "src/providers/PlayerControlProvider";
 function PlayerControls() {
   const { color } = useTheme();
-  const [slider, setSlider] = useState(0);
   const { playing, togglePlaying } = usePlayerControl();
+  const { position, duration } = useProgress(100);
+  const [sliderHold, setSliderHold] = useState(false);
+  const [sliderValue, setSliderValue] = useState();
   const handleSkip = async () => {
     await TrackPlayer.skipToNext().catch(e =>
       console.log("Already last track in queue"),
@@ -27,6 +25,16 @@ function PlayerControls() {
   const handleToggleRepeat = async () => {
     // TrackPlayer.setRepeatMode(RepeatMode.Queue);
   };
+  const handleSlidingComplete = async value => {
+    // TODO: write my own timer
+    await TrackPlayer.seekTo(value[0]);
+    setTimeout(() => setSliderHold(false), 1000);
+  };
+  let pos = sliderHold ? sliderValue : position;
+  let posMin = Math.floor(pos / 60);
+  let posSec = `${Math.floor(pos - posMin * 60)}`.padStart(2, "0");
+  let durMin = Math.floor(duration / 60);
+  let durSec = `${Math.floor(duration - durMin * 60)}`.padStart(2, "0");
   return (
     <View>
       <View>
@@ -34,15 +42,25 @@ function PlayerControls() {
           thumbTintColor={color.primary}
           minimumTrackTintColor={color.primary}
           thumbStyle={{ elevation: 5, width: 13, height: 13 }}
-          value={slider}
+          value={pos}
           step={1}
           minimumValue={0}
-          maximumValue={100000}
-          onValueChange={value => setSlider(value)}
+          maximumValue={duration}
+          onValueChange={value => setSliderValue(value[0])}
+          onSlidingStart={() => setSliderHold(true)}
+          onSlidingComplete={handleSlidingComplete}
         />
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <TextPar style={{ marginTop: -10 }}>2:40</TextPar>
-          <TextPar style={{ marginTop: -10 }}>5:50</TextPar>
+          <TextPar style={{ marginTop: -10 }}>
+            {posMin}
+            {":"}
+            {posSec}
+          </TextPar>
+          <TextPar style={{ marginTop: -10 }}>
+            {durMin}
+            {":"}
+            {durSec}
+          </TextPar>
         </View>
       </View>
       <View style={styles.buttonWrapper}>
@@ -63,7 +81,6 @@ function PlayerControls() {
     </View>
   );
 }
-PlayerControls.propTypes = {};
 const styles = {
   buttonWrapper: {
     flexDirection: "row",

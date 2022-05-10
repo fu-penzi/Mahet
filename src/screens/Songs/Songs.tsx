@@ -5,11 +5,8 @@ import { images } from "../../mock/images";
 import usePassTheme from "../../hooks/usePassTheme";
 import Song from "src/screens/Songs/Song";
 import { useData } from "src/providers/DataProvider";
-import TrackPlayer, {
-  State,
-  usePlaybackState,
-} from "react-native-track-player";
-import { usePlayerControl } from "src/providers/PlayerProvider";
+import TrackPlayer from "react-native-track-player";
+import { usePlayerControl } from "src/providers/PlayerControlProvider";
 export default function Songs() {
   const [trackInQueue, setTrackInQueue] = useState<number>();
   const styles = usePassTheme(makeStyles);

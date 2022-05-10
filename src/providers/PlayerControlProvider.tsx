@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TrackPlayer, {
+  Capability,
   // Event,
   State,
   usePlaybackState,
   // useTrackPlayerEvents,
 } from "react-native-track-player";
+import getMusicFiles from "src/screens/Player/getMusicFiles";
+import getPermissions from "src/shared/getPermissions";
 // import Track from "src/data/dataTypes";
 const PlayerControlContext = React.createContext<any>(undefined);
 // const events = [Event.PlaybackTrackChanged, Event.PlaybackError];
@@ -12,6 +15,42 @@ function PlayerControlProvider({ children }: any) {
   // const [track, setTracks] = useState<Track | undefined>(undefined);
   const [playing, setPlaying] = useState(false);
   const playbackState = usePlaybackState();
+  // !!!! Triggers every app run
+  //TO CHANGE
+  useEffect(() => {
+    getPermissions()
+      .then(areGranted =>
+        areGranted
+          ? getMusicFiles()
+          : Promise.reject(
+              "Could not get permissions, clear storage and try again.",
+            ),
+      )
+      .catch(err => console.error(err));
+  }, []);
+  //
+  //
+  useEffect(() => {
+    const setupIfNecessary = async () => {
+      const currentTrack = await TrackPlayer.getCurrentTrack();
+      if (currentTrack !== null) {
+        return;
+      }
+      await TrackPlayer.setupPlayer({});
+      await TrackPlayer.updateOptions({
+        stopWithApp: true,
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+          Capability.Stop,
+        ],
+        compactCapabilities: [Capability.Play, Capability.Pause],
+      });
+    };
+    setupIfNecessary().catch(err => console.error(err));
+  }, []);
   const togglePlaying = async () => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (currentTrack == null) {
