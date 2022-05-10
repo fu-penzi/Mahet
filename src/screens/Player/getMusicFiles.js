@@ -1,6 +1,6 @@
 import { DownloadDirectoryPath, readDir } from "react-native-fs";
 import MusicMetadataWrapper from "react-native-music-metadata";
-import { loadTracks, saveTracks } from "../../data/Schema";
+import { saveTracks } from "../../data/Schema";
 
 // 1. Searches for files with .mp3 extension
 // 2. Gets metadata for tracks
@@ -14,8 +14,7 @@ export default async function getMusicFiles() {
         ? MusicMetadataWrapper.getMetadata(tracks.flat(Infinity))
         : Promise.reject(`No tracks found in ${dirPath} folder!`),
     )
-    .then(tracks => saveTracks(tracks))
-    .then(() => loadTracks());
+    .then(tracks => saveTracks(tracks));
 }
 const readDirRecursive = async dirPath => {
   const files = await readDir(dirPath);

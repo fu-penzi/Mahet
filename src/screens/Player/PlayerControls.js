@@ -9,26 +9,11 @@ import TrackPlayer, {
   State,
   usePlaybackState,
 } from "react-native-track-player";
+import { usePlayerControl } from "src/providers/PlayerProvider";
 function PlayerControls() {
   const { color } = useTheme();
   const [slider, setSlider] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const playbackState = usePlaybackState();
-
-  const togglePlaying = async () => {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    if (currentTrack == null) {
-      throw new Error("Tekst dolny");
-      // TODO: Perhaps present an error or restart the playlist?
-    } else {
-      if (playbackState !== State.Playing && !playing) {
-        await TrackPlayer.play();
-      } else if (playing) {
-        await TrackPlayer.pause();
-      }
-    }
-    setPlaying(state => !state);
-  };
+  const { playing, togglePlaying } = usePlayerControl();
   const handleSkip = async () => {
     await TrackPlayer.skipToNext().catch(e =>
       console.log("Already last track in queue"),

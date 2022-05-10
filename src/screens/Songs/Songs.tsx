@@ -1,26 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { StatusBar, View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../mock/images";
 import usePassTheme from "../../hooks/usePassTheme";
 import Song from "src/screens/Songs/Song";
-
+import { useData } from "src/providers/DataProvider";
+import TrackPlayer, {
+  State,
+  usePlaybackState,
+} from "react-native-track-player";
+import { usePlayerControl } from "src/providers/PlayerProvider";
 export default function Songs() {
+  const [trackInQueue, setTrackInQueue] = useState<number>();
   const styles = usePassTheme(makeStyles);
+  const tracks = useData();
+  const { playing, togglePlaying } = usePlayerControl();
+  const playSongs = async (idx: number) => {
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+    if (currentTrack === null || trackInQueue === undefined) {
+      tracks?.forEach(track => {
+        TrackPlayer.add(track);
+      });
+    }
+    if (trackInQueue === idx) {
+      togglePlaying();
+    } else {
+      if (!playing) {
+        togglePlaying();
+      }
+      TrackPlayer.skip(idx).then(() => setTrackInQueue(idx));
+    }
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
       <ScrollView style={styles.contentWrapper}>
         <View>
-          {images.concat(images).map((v, i) => (
-            <Song
-              key={i}
-              title="Moonsong"
-              author="Adrian von Ziegler"
-              image={v}
-              playing={i === 2}
-            />
-          ))}
+          {tracks &&
+            tracks.map((track, i) => (
+              <Song
+                key={i}
+                title={track.title}
+                artist={track.artist ? track.artist : ""}
+                image={images[i]}
+                playing={i === trackInQueue}
+                onPress={() => playSongs(i)}
+              />
+            ))}
         </View>
       </ScrollView>
     </SafeAreaView>

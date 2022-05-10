@@ -1,37 +1,44 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import usePassTheme from "src/hooks/usePassTheme";
 import TextPar from "src/shared/Components/TextPar";
 
-export default function Song({ title, author, image, playing }: Song) {
+export default function Song({ title, artist, image, playing, onPress }: Song) {
   const styles = usePassTheme(makeStyles);
   return (
-    <View
-      style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
-      <View style={styles.trackImageWrap}>
-        <Image style={styles.trackImage} source={image} />
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginBottom: 12,
+        }}>
+        <View style={styles.trackImageWrap}>
+          <Image style={styles.trackImage} source={image} />
+        </View>
+        <View>
+          {playing ? (
+            <>
+              <TextPar color="primary">{title}</TextPar>
+              <TextPar color="primaryDark">{artist}</TextPar>
+            </>
+          ) : (
+            <>
+              <TextPar>{title}</TextPar>
+              <TextPar secondary>{artist}</TextPar>
+            </>
+          )}
+        </View>
       </View>
-      <View>
-        {playing ? (
-          <>
-            <TextPar color="primary">{title}</TextPar>
-            <TextPar color="primaryDark">{author}</TextPar>
-          </>
-        ) : (
-          <>
-            <TextPar>{title}</TextPar>
-            <TextPar secondary>{author}</TextPar>
-          </>
-        )}
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 interface Song {
   title: string;
-  author: string;
+  artist: string;
   image: number;
   playing: boolean;
+  onPress: () => any;
 }
 const makeStyles = (theme: any) =>
   StyleSheet.create({

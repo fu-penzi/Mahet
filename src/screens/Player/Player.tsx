@@ -8,21 +8,6 @@ import { useTheme } from "../../theme/ThemeProvider";
 import getPermissions from "../../shared/getPermissions";
 import getMusicFiles from "./getMusicFiles";
 import Track from "src/data/dataTypes";
-const addToQueue = async (tracks: Track[]) => {
-  console.log(tracks);
-  if (!Array.isArray(tracks)) {
-    return;
-  }
-  //
-  const currentTrack = await TrackPlayer.getCurrentTrack();
-  if (currentTrack !== null) {
-    return;
-  }
-  //
-  tracks.forEach(track => {
-    TrackPlayer.add(track);
-  });
-};
 export default function Player(): JSX.Element {
   const theme = useTheme();
   useEffect(() => {
@@ -52,13 +37,11 @@ export default function Player(): JSX.Element {
         areGranted
           ? getMusicFiles()
           : Promise.reject(
-              "Could not get permissions, clear storage and try again.",
+              "Could not get permissions, clear stosrage and try again.",
             ),
       )
-      .then(res => addToQueue(res))
       .catch(err => console.error(err));
   }, []);
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
